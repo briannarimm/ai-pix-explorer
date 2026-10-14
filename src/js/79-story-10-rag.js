@@ -1,0 +1,62 @@
+/* ==== LEVEL 10: Open Book (retrieval-augmented generation) ==== */
+BOOK.rag={title:'Open Book',pages:[
+rpage(`<h2><small>LEVEL 10 · OPEN BOOK</small>Closed book, open book</h2>`,
+`<p class="drop">A plain LLM takes every test closed-book. It answers from patterns absorbed in training. Lewis and colleagues call that its <b>parametric memory</b>: knowledge stored in the weights. It has three weaknesses. The knowledge stops at a cutoff date, it is hard to update, and the model cannot say where any of it came from {{c:lewis2020}}.</p>`,
+`<p><b>Retrieval-augmented generation</b> (RAG) makes the exam open-book. Before the model answers, a search system finds the most relevant passages in a document collection and puts them in the text the model reads. The model then writes its answer from those passages and points to them. Lewis and colleagues pair a text generator with a searchable index of Wikipedia, which they call <b>non-parametric memory</b> {{c:lewis2020}}. A later review describes the same idea: retrieve relevant documents from wikis, databases or web pages and use them as supplementary context, which can improve accuracy and bring in current or specialized knowledge {{c:moradi2025}}.</p>`,
+CB('everyday','EVERYDAY COMPARISON','An open-book exam. The student still has to understand the question, but the answers can be looked up and the page can be shown.'),
+CB('lit','AN OLD IDEA','Persson\'s 1964 survey already lists question-answering machines that consult stored text. One answered questions about baseball from a stored handbook of statistics. Another answered questions about general topics by quoting passages from a children\'s encyclopedia {{c:persson1964}}. The modern version swaps keyword matching for learned embeddings.')),
+rpage(`<h2><small>BEFORE ANY QUESTION</small>Chunk, embed, index</h2>`,
+`<p>Your documents are cut into passages called <b>chunks</b>, like cutting a treatise into index cards. In the original RAG experiments, each Wikipedia article was split into disjoint chunks of 100 words, producing about 21 million passages {{c:lewis2020}}. Each chunk goes through an embedding model, which turns it into a vector, a point on the meaning map from Level 3. The vectors are stored in a <b>vector index</b>, a database built to find nearest neighbors quickly among millions of points. Lewis and colleagues used a graph-based index for fast approximate search {{c:lewis2020}}.</p>`,
+CB('everyday','EVERYDAY COMPARISON','A library shelved by topic instead of by title. Everything about no-contest clauses sits on one shelf even when the titles share no words.'),
+`<p>Chunk size is a real trade-off. Small cards are precise but can split an argument in half. Big cards keep context but blur the match and use more of the desk.</p>`,
+CB('ml','IN ML TERMS','Retrieval is k-nearest-neighbors over embeddings. The retriever\'s recall caps the answer\'s quality: a chunk that is not retrieved cannot be used.')),
+rpage(`<h2><small>AT QUESTION TIME</small>Retrieve, augment, generate</h2>`,
+`<p><b>Retrieve.</b> Your question goes through the same embedding model and becomes a vector. The index returns the <i>k</i> chunks whose vectors point most nearly the same way. Lewis and colleagues tried 5 and 10 {{c:lewis2020}}. Many systems also run an old-fashioned keyword search in parallel and merge the two lists, because embeddings sometimes miss exact strings like a statute number.</p>`,
+`<p><b>Augment.</b> The harness assembles a prompt: instructions ("answer only from the sources below, cite them, say so if they do not answer the question"), then the retrieved chunks with labels like [1] and [2], then your question. That bundle is everything the model sees.</p>`,
+`<p><b>Generate.</b> The model writes its answer token by token as always. With the passages on the desk, the likeliest continuations restate and cite them. Citations work because each chunk carries a label and the model copies the label.</p>`,
+CB('try','TRY IT','The <b>RAG Library</b> runs all five steps on eight fictional firm memos. Turn retrieval off and watch the same question get an unsourced answer.<br><button class="btn small lemon" type="button" data-toy="rag">Open the toy</button>')),
+rpage(`<h2><small>TWO FLAVORS, ONE TRICK</small>How the original system worked</h2>`,
+`<p>The original RAG system used a neural retriever (called DPR) to fetch passages and a text generator (called BART) to write the answer. Because the retrieved document is unknown, the model treats it as a hidden variable and averages over the top few. In <b>RAG-Sequence</b>, one retrieved document supports the whole answer. In <b>RAG-Token</b>, each token may draw on a different document {{c:lewis2020}}.</p>`,
+CB('lit','FROM THE LITERATURE','The authors highlight a practical advantage, <b>index hot-swapping</b>. A parametric-only model needs more training to learn what changed in the world. A RAG model can swap in a newer index. They demonstrated it by comparing a December 2016 Wikipedia index with a December 2018 one, on questions about world leaders who had changed {{c:lewis2020}}. In human evaluations, people preferred RAG\'s answers to a parametric-only model\'s, finding them more factual and specific {{c:lewis2020}}.'),
+NERD('averaging over retrieved documents',EQ(`<i>p</i>(<i>y</i> | <i>x</i>) ≈ <span class="big">Σ</span><sub><i>z</i> ∈ top-<i>k</i></sub> <i>p</i><sub><i>η</i></sub>(<i>z</i> | <i>x</i>) · <i>p</i><sub><i>θ</i></sub>(<i>y</i> | <i>x</i>, <i>z</i>)`,'RAG-Sequence (Lewis et al., 2020, Sec. 2.1). One retrieved document z supports the entire output y.')+WHERE([['x','the question'],['z','a retrieved passage'],['p<sub>η</sub>(z|x)','how relevant the retriever thinks z is'],['p<sub>θ</sub>(y|x,z)','the generator\'s probability for answer y given the passage']]))),
+rpage(`<h2><small>WHAT RAG CANNOT FIX</small>Limits of the open book</h2>`,
+`<ul><li><b>Retrieval sets the boundary.</b> If the right chunk is not in the top <i>k</i>, the model never sees it. If the collection does not contain the answer, a well-built system says so and a poorly built one falls back on memory.</li><li><b>Scope matters.</b> If the search is filtered to one jurisdiction, nothing from anywhere else reaches the desk. Level 13 shows what that costs.</li><li><b>The model can misread a source.</b> Citations point to a passage. They do not prove the model understood it, so a human must still check.</li><li><b>Retrieval can collapse.</b> In some tasks, the original authors saw the retriever learn to return the same documents regardless of the question {{c:lewis2020}}.</li></ul>`,
+CB('warn','HONESTY NOTE','The memos in this game are eight short invented notes. Retrieval in the toy scores word overlap plus a small synonym list. Real systems use learned embeddings, which match meaning even with zero shared words, and often combine both.'),
+`<h3>Review</h3><ul><li>RAG gives a model an open book: fetch passages, put them in the prompt, answer from them with citations.</li><li>Prepare once: chunk, embed, index. At question time: retrieve, augment, generate.</li><li>Swap the index to update knowledge without retraining.</li><li>The answer can only be as good as what was retrieved.</li></ul>`)
+]};
+
+LEVELS.push({id:'rag',n:10,day:'Thursday',title:'Open Book',scene:'archive',music:'lab',toy:'rag',sticker:null,
+ blurb:'Retrieval-augmented generation: chunk, embed, index, retrieve, augment, generate, and cite.',
+ script:()=>[
+ {card:{day:'THURSDAY',time:'2:00 PM',sub:'The Archive, down in the stacks.'}},
+ {bg:'archive',music:'lab',cast:{}},
+ CAST({quill:{pos:'ML',mood:'happy'},pixel:{pos:'R',mood:'excited'}}),
+ Q('Pixel has a problem you already know. Its knowledge is in its weights. It stops at a cutoff date, it cannot be updated without more training, and it cannot say where anything came from. {{c:lewis2020}}','think'),
+ PX('I can say where! ...Generally. ...Vaguely. ...Not at all, actually.','sad'),
+ Q('The fix is old. In 1964, programs already answered questions by looking things up in stored text. {{c:persson1964}} The modern version is called retrieval-augmented generation. [[RAG]]. An open-book exam.','happy'),
+ {hot:{prompt:'Explore the Archive. Find two things.',need:2,items:{
+   ladder:[NAR('A rolling ladder leans on the shelves. A paper sign: DO NOT CLIMB WITH LATIN.'),PX('I tried climbing with Latin once. It was a lot of volumes.','think')],
+   index:[NAR('A wall of tiny drawers. Each one has a label, a topic, and a stack of cards.'),Q('Index cards. In RAG every document is cut into chunks and each chunk becomes a card.','happy')],
+   crates:[NAR('Crates labeled MEMOS. One says M-101.'),Q('Eight fictional memos for this game. A short note on no-contest clauses, one on motions to dismiss, one on citation policy, and so on.','neutral')],
+   lamp:[NAR('A hanging lamp throws a warm circle on the floor. Dust floats in it.'),Q('The pool of light is the desk. Only what is in the light is on the desk.','think')]}}},
+ Q('Step one happens before any question. Cut each document into [[chunks]]. The original RAG experiments split Wikipedia into 100-word chunks, about 21 million of them. {{c:lewis2020}}','think'),
+ Q('Run each chunk through an embedding model and you get a vector, a point on the map from Tuesday. Store the points in a [[vector index]], a database that finds nearest neighbors fast.','neutral'),
+ PX('A library shelved by topic instead of by title!','excited'),
+ Q('Then comes a question. It gets the same treatment: turned into a vector. The index returns the chunks whose arrows point most nearly the same way. Those go into the prompt, labeled [1], [2], and so on. Then Pixel writes.','happy'),
+ {toy:'rag',goals:[{text:'Run the pipeline',on:'click',sel:'#ragGo',n:1},{text:'Turn retrieval OFF and run again',on:'change',sel:'#ragOn',n:1},{text:'Try the "Off-topic" question',on:'click',sel:'[data-rq]',n:1}],note:'Compare a grounded answer with an unsourced one.'},
+ Q('Look at the two answers to the same question. With retrieval on, every sentence traces to a labeled chunk you can read. With it off, the answer sounds just as confident and cites a case nobody can find.','stern'),
+ PX('And that case is made up. The toy says so. I feel bad.','sad'),
+ Q('Notice also what happened with the off-topic question. When nothing matched, the system said it could not find an answer. That is a feature. A low similarity score is a useful signal.','happy'),
+ {ask:{q:'A RAG system retrieves the top 2 passages and the model writes an answer that cites them. What can still go wrong?',opts:[
+   {t:'The right passage might not have been retrieved, or the model might misread the ones it got',ok:true,why:'Retrieval sets the boundary of what is considered, and citations do not prove the model understood the source.'},
+   {t:'Nothing, because citations make every answer correct',why:'A citation points to a passage. It does not prove the passage supports the claim as written.'},
+   {t:'The model forgets the passages immediately',why:'The passages stay on the desk for the whole answer. The risk is about what got retrieved and how it was read.'}]}},
+ Q('A neat advantage from the original paper: you can swap the index. An old encyclopedia dump and a newer one gave different answers about world leaders, with no retraining. {{c:lewis2020}}','think'),
+ PX('So the library is replaceable, and I stay the same.','happy'),
+ Q('Exactly. Pixel\'s weights never change. Only its reading material does. Next, one more thing the library cannot do for you: look at the results, decide what to do next, and call someone to check.','wink'),
+ {ask:{q:'In RAG, which step makes the model\'s answer depend on documents, not only on memory?',opts:[
+   {t:'Augment: the retrieved passages are placed in the prompt the model reads',ok:true,why:'The model\'s weights are the same. The new input text is what changes the answer.'},
+   {t:'Chunk: cutting the documents into passages',why:'Chunking prepares the index. The documents reach the model only when retrieved passages enter the prompt.'},
+   {t:'Fine-tune: retraining the model on the documents',why:'That is a different method. RAG leaves the weights alone.'}]}},
+ {end:{learned:['RAG makes the model\'s exam open-book: retrieve passages, put them in the prompt, answer from them with citations.','Chunk, embed and index ahead of time. At question time: retrieve, augment, generate.','Retrieval sets the boundary of what is considered. A citation is a pointer, not proof.'],stickers:[]}}
+]});

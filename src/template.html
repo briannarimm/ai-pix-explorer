@@ -1,0 +1,78 @@
+<title>AI Pix Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=STIX+Two+Text:ital@0;1&family=VT323&display=swap">
+<style>
+/*{{CSS}}*/
+</style>
+
+<div class="app" id="app">
+
+  <!-- ================= TITLE SCREEN ================= -->
+  <div class="gwin title" id="titlewin" style="display:block">
+    <div class="gtitle">
+      <svg class="ico" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="#ffd92e" stroke="#1a1033" stroke-width="3"/><circle cx="15" cy="17" r="4" fill="#ff2d95" stroke="#1a1033" stroke-width="2"/><circle cx="29" cy="17" r="4" fill="#2f8cff" stroke="#1a1033" stroke-width="2"/><path d="M12 28 q10 9 20 0" fill="none" stroke="#1a1033" stroke-width="3" stroke-linecap="round"/></svg>
+      <h1>AI Pix Explorer</h1>
+      <div class="dots"><i></i><i></i><i></i></div>
+    </div>
+    <div class="titlebody">
+      <div class="art" id="titleArt">
+        <div class="logo"><h2>AI PIX<br>EXPLORER</h2><p>The Westmore Files · an interactive textbook adventure</p></div>
+      </div>
+      <div class="menu" id="titleMenu"></div>
+    </div>
+    <div class="tag"><span>Ages 12 to adult · <b>Requires:</b> 1 curious brain</span><span id="titleNote">Fictional cases. Simulated numbers are labeled.</span></div>
+  </div>
+
+  <!-- ================= THE GAME WINDOW ================= -->
+  <div class="gwin" id="gamewin" hidden>
+    <div class="gtitle">
+      <svg class="ico" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="#ffd92e" stroke="#1a1033" stroke-width="3"/><circle cx="15" cy="17" r="4" fill="#ff2d95" stroke="#1a1033" stroke-width="2"/><circle cx="29" cy="17" r="4" fill="#2f8cff" stroke="#1a1033" stroke-width="2"/><path d="M12 28 q10 9 20 0" fill="none" stroke="#1a1033" stroke-width="3" stroke-linecap="round"/></svg>
+      <h1>AI Pix Explorer · The Westmore Files</h1>
+      <div class="dots"><i></i><i></i><i></i></div>
+    </div>
+    <div class="gbar" id="gbar">
+      <div class="where"><b id="whereDay">DAY 1</b><span id="whereLvl">First Day</span></div>
+      <div class="sp"></div>
+      <button class="chip mobile-only" id="tbBtn" type="button" data-hint="Open the toolbox: book, map, toys and more.">🧰 Toolbox</button>
+      <button class="chip" id="logBtn" type="button" data-hint="Read back through what was said.">Log</button>
+      <button class="chip" id="autoBtn" type="button" aria-pressed="false" data-hint="Auto: lines advance by themselves.">Auto</button>
+      <button class="chip" id="skipBtn" type="button" aria-pressed="false" data-hint="Skip: fast-forward through lines you have already seen.">Skip</button>
+      <button class="chip" id="soundBtn" type="button" aria-pressed="false" data-hint="Kid-software beeps and a little music. Off by default.">Sound: off</button>
+      <button class="chip" id="menuBtn" type="button" data-hint="Settings, save and the title screen.">Menu</button>
+    </div>
+    <div class="gbody">
+      <nav class="toolbox" id="toolbox" aria-label="Toolbox"></nav>
+      <main class="stagewrap" id="stagewrap">
+        <div class="sframe" id="sframe">
+          <div class="scene" id="scene">
+            <div class="bgs" id="bgs"></div>
+            <div class="cast" id="cast"></div>
+            <div class="hots" id="hots"></div>
+            <div class="fx" id="fx"><div class="flash" id="flash"></div><div class="iris" id="iris"></div></div>
+          </div>
+          <div class="choices" id="choices" hidden></div>
+          <div class="dlgtools" id="dlgtools"></div>
+          <div class="sr-only" id="srLive" aria-live="polite"></div>
+          <div class="dlg" id="dlg" role="region" aria-label="Story text" tabindex="0">
+            <div class="name" id="dlgName"></div>
+            <div class="txt" id="dlgTxt"></div>
+            <div class="more" id="dlgMore" hidden>▼</div>
+          </div>
+        </div>
+        <div class="winlayer" id="winlayer"></div>
+      </main>
+    </div>
+    <div class="gfoot">
+      <div class="palette" id="palette" aria-label="Chapters"></div>
+      <div class="hintbar" role="status"><div class="bubble">?</div><p id="hint">Hover over anything for a hint. Click the story to keep going.</p><span class="prog" id="progTxt"></span></div>
+    </div>
+  </div>
+
+</div>
+<div id="toyshelf" hidden></div>
+<div id="floaters"></div>
+
+<script>
+/*{{JS}}*/
+</script>
