@@ -68,7 +68,7 @@ Each entry: key used in `src/js/data/refs.js`, then facts. Page numbers are the 
 - Embeddings multiplied by √d_model; embedding and pre-softmax matrix shared (Sec. 3.4).
 - Complexity (Table 1): self-attention O(n²·d), O(1) sequential ops, O(1) max path length; recurrent O(n·d²), O(n), O(n).
 - Results: WMT14 EN-DE 28.4 BLEU (big); EN-FR 41.8 BLEU after 3.5 days on 8 P100 GPUs (300K steps at 1.0 s/step); base model 100K steps = 12 hours. EN-DE data ≈4.5M sentence pairs, byte-pair vocab ≈37,000; EN-FR 36M sentences, 32,000 word-piece vocab; ≈25,000 source + 25,000 target tokens per batch.
-- Figures 3–5 (appendix): attention visualizations on the sentence "The Law will never be perfect, but its application should be just - this is what we are missing, in my opinion." Heads in layer 5 of 6 apparently do anaphora resolution for "its"; long-distance dependency "making ... more difficult". USE THIS SENTENCE (it is about the law).
+- Figures 3–5 (appendix): attention visualizations on a sentence about the law never being perfect but its application needing to be just. Heads in layer 5 of 6 apparently do anaphora resolution for "its"; long-distance dependency "making ... more difficult". USE THIS SENTENCE (it is about the law).
 
 ## devlin2019 — Devlin et al. (2019), BERT, NAACL-HLT (arXiv:1810.04805)
 - Pretrain deep bidirectional representations from unlabeled text, conditioning on left and right context in all layers; fine-tune with one extra output layer.
@@ -96,21 +96,21 @@ Each entry: key used in `src/js/data/refs.js`, then facts. Page numbers are the 
 - In-context learning: task + demonstrations given purely as text, no gradient updates. Zero-, one-, few-shot (K typically 10–100 examples that fit in the 2048-token window). Few-shot disadvantage: usually worse than fine-tuned SOTA. Larger models make more efficient use of in-context information (Fig. 1.2).
 - Byte-level BPE tokenizer reused from GPT-2 (built for almost entirely English data) — possible weakness for En→Ro translation.
 - Training data contamination study (Common Crawl may contain test sets).
-- Limitations (Sec. 5): samples "sometimes repeat themselves semantically at the document level, start to lose coherence over sufficiently long passages, contradict themselves, and occasionally contain non-sequitur sentences." Autoregressive only (no bidirectionality) may cost on fill-in-the-blank and compare-two-passages tasks.
+- Limitations (Sec. 5): samples can repeat themselves, lose coherence over long passages, contradict themselves and include non-sequiturs. Autoregressive only (no bidirectionality) may cost on fill-in-the-blank and compare-two-passages tasks.
 - GPT-3 175B reliable on 2-digit arithmetic, usually on 3-digit (Fig. 3.10).
 
 ## ouyang2022 — Ouyang et al. (2022), InstructGPT, NeurIPS 35 (arXiv:2203.02155)
 - Making LMs bigger doesn't make them follow user intent. Three steps: (1) supervised fine-tuning on human demonstrations (~13k prompts); (2) train a reward model on human rankings of outputs (~33k prompts); (3) optimize policy against RM with PPO (31k prompts). 40 contractors hired via screening test.
 - Outputs of 1.3B InstructGPT preferred over 175B GPT-3 despite 100× fewer parameters. Hallucination on closed-domain tasks 21% vs 41% (GPT-3). ~25% fewer toxic outputs when prompted to be respectful; no significant bias improvement.
 - "Alignment tax": regressions on some public NLP datasets; PPO-ptx mixes pretraining gradients to reduce it.
-- Aligns to "stated preferences of a specific group of people (mostly our labelers and researchers), rather than any broader notion of 'human values'" (Sec. 1).
+- Aligns to the stated preferences of a specific group (mostly the labelers and researchers), not to a broader notion of human values (Sec. 1).
 - RM loss = −E log σ(r(x,y_w) − r(x,y_l)) over pairs (Eq. 1).
 
 ## wei2022 — Wei et al. (2022), chain-of-thought, NeurIPS 35 (arXiv:2201.11903)
 - Chain of thought = intermediate reasoning steps in few-shot exemplars. PaLM 540B with eight CoT exemplars: GSM8K 57% vs 18% standard prompting; prior best 55%; fine-tuned GPT-3 175B 33% (Fig. 2).
 - Emergent ability of scale: gains only with models of ~100B parameters; smaller models produce "fluent but illogical chains of thought".
 - Benefits: allocates extra computation to harder problems; interpretable window into behavior (though fully characterizing computations is open).
-- Tennis-ball example: "Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls..." → 11.
+- Tennis-ball example: Roger starts with 5 balls and buys 2 cans of 3 balls each → 11.
 
 ## wang2023 — Wang et al. (2023), self-consistency, ICLR (arXiv:2203.11171)
 - Sample many diverse reasoning paths (temperature sampling; T=0.5, top-k 40 for UL2-20B/LaMDA-137B; T=0.7, k=40 for PaLM-540B; T=0.7 for GPT-3), parse each final answer, take the majority vote: argmax_a Σ 1(a_i = a). 40 samples per run, averaged over 10 runs.

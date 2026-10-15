@@ -29,6 +29,9 @@ WHAT THESE LICENSES DO NOT COVER
   - The research papers that the game cites. The authors and publishers
     own these papers. This repository does not include them. The game
     cites them so that you can find them.
+  - Short quotations and example problems from those papers. These stay
+    under the copyright of their authors. The game uses them with a
+    citation.
   - Fonts. The game loads fonts from Google Fonts. Each font has its own
     license (for example, the SIL Open Font License). Those licenses
     apply to the fonts.

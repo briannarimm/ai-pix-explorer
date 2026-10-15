@@ -4,7 +4,11 @@ AI Pix Explorer is an interactive textbook game. It teaches how large language m
 
 You play a new research fellow at a fictional law library. The story lasts one working week, from Monday to Friday. In each chapter you read a short scene, read a textbook section, use a toy and answer a few quiz questions.
 
-The game runs in a web browser. It does not need an account or an internet connection to play. It does not collect data.
+The game runs in a web browser. It does not need an account. The game itself does not collect data.
+
+**Play it online:** <https://www.briannaimm.com/ai-pix-explorer/>
+
+> **Note: This project is vibe coded.** "Vibe coding" means that a person describes what they want and an AI assistant writes the code. Brianna R. Imm set the goals, made the design decisions and reviewed the results. Claude, an AI assistant from Anthropic, wrote nearly all of the code and the text. The author did not check every line. Read the [Vibe coding and accuracy](#vibe-coding-and-accuracy) section before you rely on the content.
 
 ## Contents
 
@@ -15,10 +19,12 @@ The game runs in a web browser. It does not need an account or an internet conne
 5. [Start the game](#start-the-game)
 6. [Save your progress](#save-your-progress)
 7. [Know the limits](#know-the-limits)
-8. [Project files](#project-files)
-9. [Change the game](#change-the-game)
-10. [Sources and honesty notes](#sources-and-honesty-notes)
-11. [License](#license)
+8. [Vibe coding and accuracy](#vibe-coding-and-accuracy)
+9. [Project files](#project-files)
+10. [Change the game](#change-the-game)
+11. [Sources and honesty notes](#sources-and-honesty-notes)
+12. [Privacy](#privacy)
+13. [License](#license)
 
 ## Who this is for
 
@@ -89,13 +95,20 @@ The game explains each idea with an everyday comparison. For example, tokens are
 
 - A current web browser, such as Safari, Chrome, Firefox or Edge.
 - A screen of any size. The game works on a phone.
-- (Optional) An internet connection. The game loads its fonts from Google Fonts. Without a connection, the browser uses other fonts and some labels can look different.
+- An internet connection to open the online version. The game also loads its fonts from Google Fonts. Without a connection to Google Fonts, the browser uses other fonts and some labels can look different.
 
-To build the game from the source files, you also need:
+To build the game from the source files on your own computer, you also need:
 
 - Python 3.9 or later.
 
 ## Start the game
+
+### Option 1: Play online
+
+1. Open <https://www.briannaimm.com/ai-pix-explorer/> in your browser.
+2. Go to step 4 of Option 2 below.
+
+### Option 2: Build and open the game on your computer
 
 The game file is built from the source files in the `src` folder. Use these steps to build the game and open it.
 
@@ -123,6 +136,8 @@ The game file is built from the source files in the `src` folder. Use these step
    To skip the story, click **Toy box and textbook**. This opens the toys and the textbook directly.
 
 > **Note:** Do not open `ai-pix-explorer.html` directly in a browser. That file has no page header, because the publishing service adds one. Some browsers then show wrong symbols. Open `preview/index.html` instead.
+>
+> The online version uses `preview/index.html`. A GitHub Actions workflow builds it and publishes it each time the `main` branch changes.
 
 ## Save your progress
 
@@ -141,6 +156,19 @@ To delete your progress, click **Menu**, then **Erase**. Click the button again 
 - The game uses a small, hand-made tokenizer and a small search method. Real systems use larger and more complex methods.
 - The game explains general ideas. It does not give legal advice.
 
+## Vibe coding and accuracy
+
+This project is vibe coded. Claude, an AI assistant from Anthropic, wrote nearly all of the source code and the text. Brianna R. Imm directed the work. She chose the topics, the story, the design and the sources, and she tested the game.
+
+This has these results for you:
+
+- The author did not read every line of code. The code can contain bugs.
+- The author did not check every sentence against its source paper. The text can contain errors, such as a wrong number or a claim that is stronger than the paper says.
+- AI assistants can make up facts. The game tries to prevent this. It cites each paper fact and it labels each invented example. Use the cited paper to confirm a fact before you rely on it.
+- The game is a teaching aid. It is not legal advice and it is not a research source.
+
+If you find a mistake, [open an issue](https://github.com/briannarimm/ai-pix-explorer/issues) on GitHub. Give the chapter name and the text that is wrong.
+
 ## Project files
 
 | Path | Content |
@@ -152,6 +180,7 @@ To delete your progress, click **Menu**, then **Erase**. Click the button again 
 | `tools/build.py` | Joins the source files into one HTML file. |
 | `tools/check.py` | Plays every chapter in a hidden browser and takes screenshots. |
 | `tools/preview.py` | Builds the game and opens it. |
+| `.github/workflows/pages.yml` | Builds the game and publishes it online. |
 | `ai-pix-explorer.html` | The built game. Do not edit this file. |
 | `docs/paper-notes.md` | Facts from the cited papers, with their locations. |
 | `legacy/` | The first version of the game, with tabs. |
@@ -189,7 +218,14 @@ The game labels all fictional material:
 - The cases, memos, states and citations are invented.
 - The invented citations are never shown as real.
 
-If you find a mistake in a fact, a number or a citation, report it.
+If you find a mistake in a fact, a number or a citation, [open an issue](https://github.com/briannarimm/ai-pix-explorer/issues).
+
+## Privacy
+
+- The game does not use cookies, analytics or accounts.
+- The game does not send your name or your progress to any server. Your browser stores them on your device.
+- Your browser requests the fonts from Google Fonts. Google can see that request, including your IP address. This is the only outside request that the game makes.
+- The website host, GitHub Pages, keeps its own server logs. See the GitHub privacy statement for details.
 
 ## License
 
